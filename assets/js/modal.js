@@ -12,7 +12,7 @@
   const closeBtn = document.getElementById("modal-close-btn");
   const payBtn   = document.getElementById("pay-btn");
   const copyBtn  = document.getElementById("copy-stk-btn");
-  const STK      = "98626717018";
+  const STK      = "9862717018";
 
   // ── Open ────────────────────────────────────────────────────
   function openModal() {
