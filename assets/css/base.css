@@ -1,0 +1,86 @@
+/* ============================================================
+   BASE.CSS — Reset · Design Tokens · Typography · Animations
+   Mì Quảng 52/49
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* ── Palette ── */
+  --yellow-soft: #f3d266;
+  --yellow-bold: #e8c138;
+  --yellow-glow: rgba(232, 193, 56, 0.35);
+  --brown-warm:  #6b3f1f;
+  --dark:        #1a1208;
+  --light-bg:    #faf8f3;
+  --white:       #ffffff;
+  --text-body:   #4a3f30;
+  --text-muted:  #9a8c7d;
+  --zalo-blue:   #0068ff;
+  --border-subtle: rgba(107, 63, 31, 0.12);
+
+  /* ── Typography ── */
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body:    "Be Vietnam Pro", "Segoe UI", sans-serif;
+
+  /* ── Geometry ── */
+  --radius-sm:   8px;
+  --radius-md:   16px;
+  --radius-lg:   24px;
+  --radius-pill: 50px;
+
+  /* ── Elevation ── */
+  --shadow-card:  0 4px 24px rgba(26, 18, 8, 0.08);
+  --shadow-hover: 0 12px 40px rgba(26, 18, 8, 0.14);
+
+  /* ── Motion ── */
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --tap-min: 48px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--light-bg);
+  color: var(--dark);
+  line-height: 1.6;
+  overflow-x: hidden;
+  /* Chặn iOS tự resize font khi xoay màn hình */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* ── Keyframes ── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes icon-float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-7px); }
+}
+
+@keyframes ring-breathe {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50%       { opacity: 0.12; transform: scale(1.04); }
+}
+
+@keyframes cta-ping {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(232, 193, 56, 0.55); }
+  60%       { box-shadow: 0 0 0 16px rgba(232, 193, 56, 0); }
+}
+
+@keyframes audio-pulse {
+  0%, 100% { box-shadow: 0 4px 16px rgba(232, 193, 56, 0.55); }
+  50%       { box-shadow: 0 4px 28px rgba(232, 193, 56, 0.85); }
+}

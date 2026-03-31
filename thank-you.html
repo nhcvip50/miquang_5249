@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Thanh Toán Thành Công | Mì Quảng 52/49</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Be+Vietnam+Pro:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        /* CSS VARIABLES & RESET */
+        :root {
+            --yellow-bold: #e8c138; --dark: #1a1208; --white: #ffffff;
+            --brown-warm: #6b3f1f; --light-bg: #faf8f3;
+            --radius-pill: 50px; --shadow: 0 4px 24px rgba(0,0,0,0.08);
+        }
+        body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--light-bg); margin: 0; display: flex; flex-direction: column; min-height: 100vh; align-items: center; justify-content: center; text-align: center; }
+        
+        /* UI COMPONENTS */
+        .card { background: var(--white); padding: 2.5rem; border-radius: 24px; box-shadow: var(--shadow); max-width: 450px; width: 90%; }
+        .icon-success { width: 70px; height: 70px; background: #2ecc71; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 1.5rem; }
+        h1 { font-family: 'Playfair Display'; font-size: 2rem; color: var(--dark); margin: 0; }
+        ul { text-align: left; padding: 0; list-style: none; margin: 1.5rem 0; }
+        li { margin-bottom: 12px; display: flex; gap: 10px; font-size: 0.95rem; color: #4a3f30; }
+        li i { color: var(--yellow-bold); margin-top: 4px; }
+
+        /* AUDIO WIDGET */
+        .audio-widget { display: flex; align-items: center; justify-content: center; gap: 12px; background: #fdfaf0; padding: 10px 20px; border-radius: var(--radius-pill); border: 1px solid #eee; margin-top: 1rem; cursor: pointer; }
+        .visualizer { display: flex; align-items: flex-end; gap: 3px; height: 15px; }
+        .visualizer span { width: 3px; background: var(--yellow-bold); border-radius: 3px; height: 40%; transition: 0.3s; }
+        .visualizer.playing span { animation: bounce 0.5s ease infinite alternate; }
+        @keyframes bounce { from { height: 30%; } to { height: 100%; } }
+        
+        .btn-home { display: block; margin-top: 2rem; text-decoration: none; background: var(--yellow-bold); color: var(--dark); padding: 12px 30px; border-radius: var(--radius-pill); font-weight: 700; transition: 0.3s; }
+        .btn-home:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(232, 193, 56, 0.4); }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="icon-success"><i class="fa-solid fa-check"></i></div>
+        <h1>Thanh toán hoàn tất!</h1>
+        
+        <ul>
+            <li><i class="fa-solid fa-utensils"></i> <span>Bếp đã nhận đơn và đang bắt đầu chế biến tô mì của bạn.</span></li>
+            <li><i class="fa-solid fa-fire-burner"></i> <span>Món ăn sẽ được phục vụ nóng hổi tại bàn trong ít phút.</span></li>
+            <li><i class="fa-solid fa-heart"></i> <span>Chúc bạn có một bữa ăn ngon miệng tại Mì Quảng 52/49!</span></li>
+        </ul>
+
+        <div class="audio-widget" id="audioTrigger">
+            <div class="visualizer" id="visualizer"><span></span><span></span><span></span></div>
+            <span id="audioText" style="font-weight: 600; font-size: 0.9rem; color: var(--brown-warm);">Đang phát lời cảm ơn...</span>
+            <audio id="thanksAudio"><source src="./assets/audio/thanks-voice.mp3" type="audio/mpeg"></audio>
+        </div>
+
+        <a href="index.html" class="btn-home">Quay lại trang chủ</a>
+    </div>
+
+    <script>
+        const audio = document.getElementById('thanksAudio');
+        const trigger = document.getElementById('audioTrigger');
+        const visualizer = document.getElementById('visualizer');
+        const text = document.getElementById('audioText');
+
+        function toggleAudio() {
+            if (audio.paused) {
+                audio.play();
+                visualizer.classList.add('playing');
+                text.innerText = "Đang phát lời cảm ơn...";
+            } else {
+                audio.pause();
+                visualizer.classList.remove('playing');
+                text.innerText = "Bấm để nghe lại";
+            }
+        }
+
+        trigger.addEventListener('click', toggleAudio);
+        audio.onended = () => { visualizer.classList.remove('playing'); text.innerText = "Bấm để nghe lại"; };
+
+        // Autoplay logic (Silicon Valley standard)
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                audio.play().then(() => visualizer.classList.add('playing'))
+                .catch(() => text.innerText = "Bấm để nghe lời cảm ơn");
+            }, 800);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,331 @@
+/* ============================================================
+   OVERLAY.CSS — Splash Screen · Payment Modal · Audio Toggle
+   Mì Quảng 52/49
+   ============================================================ */
+
+/* ============================================================
+   SPLASH SCREEN
+   Gesture Gateway: buộc user interaction trước khi audio play.
+   Đây là pattern duy nhất hợp lệ trên iOS Safari & Android Chrome.
+   ============================================================ */
+#splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #1a1208 0%, #3b1f08 55%, #6b3f1f 100%);
+  cursor: pointer;
+  will-change: opacity, transform;
+  transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+#splash.hiding {
+  opacity: 0;
+  transform: scale(1.04);
+  pointer-events: none;
+}
+#splash.hidden { display: none; }
+
+/* Decorative breathing rings */
+.splash-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(243, 210, 102, 0.12);
+  animation: ring-breathe 4s ease-in-out infinite;
+}
+.splash-ring:nth-child(1) { width: 260px; height: 260px; animation-delay: 0s; }
+.splash-ring:nth-child(2) { width: 380px; height: 380px; animation-delay: 0.6s; }
+.splash-ring:nth-child(3) { width: 500px; height: 500px; animation-delay: 1.2s; }
+
+.splash-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4rem;
+  text-align: center;
+  padding: 0 2rem;
+}
+.splash-icon {
+  width: 84px; height: 84px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(243, 210, 102, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.1rem;
+  color: var(--yellow-soft);
+  animation: icon-float 3s ease-in-out infinite;
+}
+.splash-logo {
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 6vw, 2.6rem);
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.2;
+}
+.splash-logo span { color: var(--yellow-soft); }
+.splash-sub {
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 400;
+  letter-spacing: 0.4px;
+}
+.splash-cta {
+  margin-top: 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 34px;
+  border-radius: 50px;
+  background: var(--yellow-bold);
+  color: var(--dark);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  animation: cta-ping 2s ease-in-out infinite;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s ease;
+}
+.splash-cta:active { transform: scale(0.95); }
+.splash-note {
+  font-size: 0.76rem;
+  color: rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.3px;
+}
+
+/* ============================================================
+   PAYMENT MODAL
+   ============================================================ */
+#payment-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 8000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem;
+  background: rgba(26, 18, 8, 0.72);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+#payment-modal.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 24px 64px rgba(26, 18, 8, 0.35);
+  overflow: hidden;
+  transform: translateY(20px) scale(0.97);
+  /* Spring easing: cảm giác "bật lên" tự nhiên */
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
+}
+#payment-modal.open .modal-card {
+  transform: translateY(0) scale(1);
+}
+
+/* Modal header */
+.modal-header {
+  background: linear-gradient(135deg, #1a1208 0%, #3b1f08 100%);
+  padding: 1.4rem 1.6rem 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.modal-header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.modal-header-title i { color: var(--yellow-soft); font-size: 1.15rem; }
+.modal-header-title span {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.2px;
+}
+.modal-close {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.modal-close:hover { background: rgba(255, 255, 255, 0.18); color: var(--white); }
+.modal-close:focus-visible { outline: 2px solid var(--yellow-bold); }
+
+/* QR area */
+.modal-qr-wrap {
+  padding: 1.6rem 1.6rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+.modal-qr-frame {
+  width: 220px; height: 220px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 3px solid var(--yellow-bold);
+  box-shadow: 0 0 0 6px rgba(232, 193, 56, 0.14);
+  flex-shrink: 0;
+}
+.modal-qr-frame img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 20%; /* Crop phần coins decoration */
+  display: block;
+}
+.modal-qr-hint {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Info rows */
+.modal-divider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 0 1.6rem;
+}
+.modal-info {
+  padding: 0.8rem 1.6rem 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.modal-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem 1rem;
+  background: var(--light-bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  gap: 1rem;
+}
+.modal-info-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.modal-info-value {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--dark);
+  text-align: right;
+  word-break: break-all;
+}
+.modal-info-value.bank { color: #e31e24; } /* Techcombank red */
+
+/* Copy button */
+.modal-copy-btn {
+  margin-top: 0.2rem;
+  width: 100%;
+  padding: 13px;
+  border-radius: var(--radius-sm);
+  background: var(--yellow-bold);
+  color: var(--dark);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: var(--transition);
+  -webkit-tap-highlight-color: transparent;
+}
+.modal-copy-btn:hover  { background: var(--yellow-soft); }
+.modal-copy-btn:active { transform: scale(0.98); }
+.modal-copy-btn.copied { background: #22c55e; color: white; }
+
+/* ============================================================
+   AUDIO TOGGLE BUTTON (floating)
+   ============================================================ */
+#audio-toggle {
+  position: fixed;
+  bottom: max(24px, env(safe-area-inset-bottom, 24px));
+  right:  max(20px, env(safe-area-inset-right,  20px));
+  z-index: 1500;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: var(--yellow-bold);
+  color: var(--dark);
+  box-shadow: 0 4px 16px rgba(232, 193, 56, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  transition: var(--transition);
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  animation: audio-pulse 2.5s ease-in-out infinite;
+}
+#audio-toggle.muted {
+  background: rgba(107, 63, 31, 0.12);
+  color: var(--text-muted);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  animation: none;
+}
+#audio-toggle:hover { transform: scale(1.12); }
+#audio-toggle:focus-visible {
+  outline: 2px solid var(--yellow-bold);
+  outline-offset: 3px;
+}
+
+/* Tooltip */
+#audio-toggle::before {
+  content: attr(data-tip);
+  position: absolute;
+  right: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--dark);
+  color: var(--white);
+  font-size: 0.75rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+#audio-toggle:hover::before { opacity: 1; }

@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Mì Quảng 52/49 - Thưởng thức hương vị mì Quảng đậm đà truyền thống miền Trung ngay tại Tân Bình, TPHCM."
+    />
+    <meta property="og:title"       content="Mì Quảng 52/49 - Đậm vị miền Trung" />
+    <meta property="og:description" content="Hương vị truyền thống, đậm đà khó quên giữa lòng Sài Gòn." />
+    <meta property="og:image"       content="assets/images/mi-quang-hero.jpg" />
+    <meta property="og:type"        content="restaurant" />
+    <title>Mì Quảng 52/49 - Đậm vị miền Trung | TPHCM</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <!-- Styles (load order: base → layout → overlays) -->
+    <link rel="stylesheet" href="assets/css/base.css" />
+    <link rel="stylesheet" href="assets/css/layout.css" />
+    <link rel="stylesheet" href="assets/css/overlay.css" />
+  </head>
+
+  <body>
+
+    <!-- =========================================================
+         SPLASH SCREEN
+         Gesture Gateway: user tap = audio unlock + page entry
+    ========================================================== -->
+    <div id="splash" role="dialog" aria-modal="true" aria-label="Chào mừng">
+      <div class="splash-ring" aria-hidden="true"></div>
+      <div class="splash-ring" aria-hidden="true"></div>
+      <div class="splash-ring" aria-hidden="true"></div>
+      <div class="splash-content">
+        <div class="splash-icon" aria-hidden="true">
+          <i class="fa-solid fa-bowl-food"></i>
+        </div>
+        <div class="splash-logo">Mì <span>Quảng</span> 52/49</div>
+        <p class="splash-sub">Đậm vị miền Trung · Giữa lòng Sài Gòn</p>
+        <button class="splash-cta" id="splash-enter">
+          <i class="fa-solid fa-door-open" aria-hidden="true"></i>
+          Vào xem thực đơn
+        </button>
+        <p class="splash-note">Nhấn để tiếp tục · Có nhạc nền</p>
+      </div>
+    </div>
+
+    <!-- =========================================================
+         PAYMENT MODAL
+    ========================================================== -->
+    <div
+      id="payment-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+      aria-hidden="true"
+    >
+      <div class="modal-card">
+
+        <div class="modal-header">
+          <div class="modal-header-title">
+            <i class="fa-solid fa-qrcode" aria-hidden="true"></i>
+            <span id="modal-title">Thông tin thanh toán</span>
+          </div>
+          <button class="modal-close" id="modal-close-btn" aria-label="Đóng">
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <div class="modal-qr-wrap">
+          <div class="modal-qr-frame">
+            <img
+              src="assets/images/qr_payment.png"
+              alt="Mã QR thanh toán Techcombank - NGUYEN THI CHIEN"
+              width="220"
+              height="220"
+              loading="lazy"
+            />
+          </div>
+          <p class="modal-qr-hint">
+            <i class="fa-solid fa-mobile-screen" aria-hidden="true"></i>
+            Mở app ngân hàng · Quét mã QR
+          </p>
+        </div>
+
+        <div class="modal-divider" aria-hidden="true"></div>
+
+        <div class="modal-info">
+          <div class="modal-info-row">
+            <span class="modal-info-label">Người nhận</span>
+            <span class="modal-info-value">NGUYEN THI CHIEN</span>
+          </div>
+          <div class="modal-info-row">
+            <span class="modal-info-label">Ngân hàng</span>
+            <span class="modal-info-value bank">Techcombank</span>
+          </div>
+          <div class="modal-info-row">
+            <span class="modal-info-label">Số tài khoản</span>
+            <span class="modal-info-value">98626717018</span>
+          </div>
+          <button class="modal-copy-btn" id="copy-stk-btn" aria-label="Sao chép số tài khoản">
+            <i class="fa-regular fa-copy" aria-hidden="true"></i>
+            Sao chép số tài khoản
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- =========================================================
+         BACKGROUND AUDIO
+         preload="auto": buffer sẵn trước khi user tương tác
+         loop + playsinline: chuẩn iOS WKWebView
+         Không có autoplay attr — unlock bằng splash gesture
+    ========================================================== -->
+    <audio
+      id="bg-audio"
+      src="./assets/audio/welcome-voice.mp3"
+      preload="auto"
+      playsinline
+      aria-hidden="true"
+    ></audio>
+
+    <!-- Audio toggle button (floating) -->
+    <button
+      id="audio-toggle"
+      aria-label="Tắt nhạc nền"
+      data-tip="Tắt nhạc"
+      title="Tắt/bật nhạc nền"
+    >
+      <i class="fa-solid fa-music" aria-hidden="true"></i>
+    </button>
+
+    <!-- =========================================================
+         SCROLL PROGRESS
+    ========================================================== -->
+    <div class="scroll-progress" role="progressbar" aria-hidden="true"></div>
+
+    <!-- =========================================================
+         NAVIGATION
+    ========================================================== -->
+    <nav id="main-nav" role="navigation" aria-label="Menu chính">
+      <a href="#home" class="nav-logo">Mì <span>Quảng</span> 52/49</a>
+      <button
+        class="menu-toggle"
+        id="mobile-menu"
+        aria-label="Mở menu"
+        aria-expanded="false"
+        aria-controls="nav-links"
+      >
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#home">Trang chủ</a></li>
+        <li><a href="#about">Địa chỉ</a></li>
+        <li><a href="#contact">Liên hệ</a></li>
+      </ul>
+    </nav>
+
+    <!-- =========================================================
+         HERO SECTION
+    ========================================================== -->
+    <section id="home" class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <i class="fa-solid fa-bowl-food" aria-hidden="true"></i>
+          Đặc sản miền Trung
+        </div>
+        <h1 class="hero-title">
+          Mì Quảng 52/49<br />
+          <span class="highlight">Đậm vị miền Trung</span>
+        </h1>
+        <p class="hero-desc">
+          Hương vị truyền thống, đậm đà khó quên giữa lòng Sài Gòn.<br />
+          Nấu tươi mỗi ngày — không phụ gia, không qua đêm.
+        </p>
+        <div class="hero-actions">
+          <a href="#" class="cta-button" id="pay-btn" data-amount="45000">
+            <i class="fa-solid fa-wallet" aria-hidden="true"></i>
+            Thông tin thanh toán
+          </a>
+          <a href="#about" class="cta-secondary">
+            Xem địa chỉ <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img
+          src="assets/images/mi-quang-hero.jpg"
+          alt="Tô Mì Quảng 52/49 đặc biệt với nhân tôm thịt đậm đà"
+          width="600"
+          height="450"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+    </section>
+
+    <!-- =========================================================
+         HOURS STRIP
+    ========================================================== -->
+    <div class="hours-strip reveal" role="complementary" aria-label="Giờ mở cửa">
+      <div class="hours-item">
+        <i class="fa-regular fa-clock" aria-hidden="true"></i>
+        <span>Mở cửa: <strong>5:00 – 12:00</strong></span>
+      </div>
+      <div class="hours-item">
+        <i class="fa-solid fa-calendar-days" aria-hidden="true"></i>
+        <span>Tất cả các ngày</span>
+      </div>
+      <div class="hours-item">
+        <i class="fa-solid fa-fire-burner" aria-hidden="true"></i>
+        <span>Nấu tươi mỗi ngày</span>
+      </div>
+    </div>
+
+    <!-- =========================================================
+         ABOUT / MAP SECTION
+    ========================================================== -->
+    <section id="about" class="about-section" aria-labelledby="about-heading">
+      <div class="section-header reveal">
+        <span class="section-label">Tìm chúng tôi</span>
+        <h2 class="section-title" id="about-heading">Địa chỉ cửa hàng</h2>
+      </div>
+      <div class="about-card reveal">
+        <div class="about-card-icon">
+          <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+        </div>
+        <p>52/49 Nguyễn Sỹ Sách, Phường Tân Sơn, TP. Hồ Chí Minh</p>
+      </div>
+      <div class="map-container reveal">
+        <iframe
+          title="Bản đồ Mì Quảng 52/49 Nguyễn Sỹ Sách"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.123456789!2d106.638421!3d10.806637!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317529437b0d019d%3A0xc47e30777b5f0d9a!2zNTIvNDkgTmd1eeG7hW4gU-G7uSBTw6FjaCwgVMOibiBTxqFuLCBUw6JuIELDr25oLCBUaMOgbmggcGjhu5EgSOG7kyBDaMOtIE1pbmgsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1711612345678!5m2!1svi!2s"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         CONTACT SECTION
+    ========================================================== -->
+    <section id="contact" class="contact-section" aria-labelledby="contact-heading">
+      <div class="section-header reveal">
+        <span class="section-label">Kết nối với chúng tôi</span>
+        <h2 class="section-title" id="contact-heading">Liên hệ</h2>
+      </div>
+      <div class="contact-cards">
+        <a href="tel:0862717018" class="contact-method reveal">
+          <div class="contact-icon">
+            <i class="fa-solid fa-phone" aria-hidden="true"></i>
+          </div>
+          <div class="contact-info">
+            <h3>Gọi điện</h3>
+            <p>0862.717.018</p>
+          </div>
+        </a>
+        <a
+          href="https://zalo.me/0862717018"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="contact-method reveal"
+        >
+          <div class="contact-icon">
+            <i
+              class="fa-solid fa-comment-dots"
+              aria-hidden="true"
+              style="color: var(--zalo-blue)"
+            ></i>
+          </div>
+          <div class="contact-info">
+            <h3>Nhắn Zalo</h3>
+            <p>0862.717.018</p>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         FOOTER
+    ========================================================== -->
+    <footer role="contentinfo">
+      <p>© 2026 <strong>Mì Quảng 52/49</strong> · Nguyễn Sỹ Sách, Tân Sơn, TPHCM</p>
+    </footer>
+
+    <!-- =========================================================
+         SCRIPTS (defer: không block render, thực thi sau DOMContentLoaded)
+         Thứ tự load: nav → modal → audio
+    ========================================================== -->
+    <script src="assets/js/nav.js"   defer></script>
+    <script src="assets/js/modal.js" defer></script>
+    <script src="assets/js/audio.js" defer></script>
+
+  </body>
+</html>
